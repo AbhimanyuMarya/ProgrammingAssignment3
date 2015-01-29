@@ -17,7 +17,9 @@
 rm(list=ls())
 best <- function(state, outcome) {
   ## Read outcome data
+  ## Note that argument «colClasses = "character"» coerces all into charcter class
   outcome_data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+  
   ## Check that state and outcome are valid
    if(all(state != outcome_data$State)){ 
      stop("invalid state")
@@ -33,6 +35,7 @@ best <- function(state, outcome) {
    #'heart failure' or'pneumonia' ")  
   }
     
+  
   if (outcome=="heart attack"){
     
     ## Return hospital name in that state with lowest 
@@ -40,6 +43,10 @@ best <- function(state, outcome) {
     
     ## reduce dataframe to needed data two columns Hospital Name and 
     data<-outcome_data[outcome_data$State==state,c(2,11)]
+    
+    #Motality rates are a character data, to order numerically must coerce, use supressWarning to avoid warning
+    #when coering not the numbers but the "Not avaliable" entries
+    suppressWarnings(data[,2]<- as.numeric (data[,2]))
     
     ## sort first by Mortality Rates, then Hospital, place NAs in the end
     sorted<-data[order(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack, data$Hospital.Name, na.last = TRUE),]
@@ -52,12 +59,19 @@ best <- function(state, outcome) {
    
     ## Return hospital name in that state with lowest 30-day death rate
     # $Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure [,17]
-    
+  
     ## reduce dataframe to needed data, two columns Hospital Name and Mortality..Rates.from.Heart.Failure [,17]
     data<-outcome_data[outcome_data$State==state,c(2,17)]
     
+    #Motality rates are a character data, to order numerically must coerce, use supressWarning to avoid warning
+    #when coering not the numbers but the "Not avaliable" entries
+    suppressWarnings(data[,2]<- as.numeric (data[,2]))
+    
+    #file.state.sub[,3]<- as.numeric file.state.sub[,3])
+    sorted<-data[order(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure, na.last = TRUE),]
+    
     ## sort first by Mortality Rates, then Hospital, place NAs in the end
-    sorted<-data[order(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure, data$Hospital.Name, na.last = TRUE),]
+#     sorted<-data[order(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure, data$Hospital.Name, na.last = TRUE),]
     
     #print first Hospital Name, the fist row of first column
     sorted[1,1]
@@ -67,7 +81,12 @@ best <- function(state, outcome) {
     
     ## Return hospital name in that state with lowest 30-day death rate
     # $Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia [,23]
+    
     data<-outcome_data[outcome_data$State==state,c(2,23)]
+    
+    #Motality rates are a character data, to order numerically must coerce, use supressWarning to avoid warning
+    #when coering not the numbers but the "Not avaliable" entries
+    suppressWarnings(data[,2]<- as.numeric (data[,2]))
     
     ## sort first by Mortality Rates, then Hospital, place NAs in the end
     sorted<-data[order(data$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia, data$Hospital.Name, na.last = TRUE),]
@@ -88,11 +107,11 @@ best <- function(state, outcome) {
 # > best("TX", "heart attack")
 # [1] "CYPRESS FAIRBANKS MEDICAL CENTER"                    OK
 # > best("TX", "heart failure")
-# [1] "FORT DUNCAN MEDICAL CENTER"                          !!!!IS GIVING "HARRIS COUNTY HOSPITAL DISTRICT"
+# [1] "FORT DUNCAN MEDICAL CENTER"                 
 # > best("MD", "heart attack") 
 # [1] "JOHNS HOPKINS HOSPITAL, THE"                         OK
 # > best("MD", "pneumonia")
-# [1] "GREATER BALTIMORE MEDICAL CENTER"                    !!!! IS GIVING "CALVERT MEMORIAL HOSPITAL"
+# [1] "GREATER BALTIMORE MEDICAL CENTER"          
 # > best("BB", "heart attack")
 # Error in best("BB", "heart attack") : invalid state
 # > best("NY", "hert attack")
