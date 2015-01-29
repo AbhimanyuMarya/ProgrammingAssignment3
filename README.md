@@ -10,10 +10,10 @@ Handling ties. If there is a tie for the best hospital for a given outcome, then
 The function should use the following template.
 
 best <- function(state, outcome) {
-## Read outcome data
-## Check that state and outcome are valid
-## Return hospital name in that state with lowest 30-day death
-## rate
+Read outcome data
+Check that state and outcome are valid
+Return hospital name in that state with lowest 30-day death
+rate
 }
 
 The function should check the validity of its arguments. If an invalid state value is passed to
@@ -58,10 +58,10 @@ Note that Cypress Fairbanks Medical Center and Detar Hospital Navarro both have 
 The function should use the following template.
 
 rankhospital <- function(state, outcome, num = "best") {
-## Read outcome data
-## Check that state and outcome are valid
-## Return hospital name in that state with the given rank
-## 30-day death rate
+Read outcome data
+Check that state and outcome are valid
+Return hospital name in that state with the given rank
+30-day death rate
 }
 
 The function should check the validity of its arguments. If an invalid state value is passed to best, the function should throw an error via the stop function with the exact message \invalid state". If an invalid outcome value is passed to best, the function should throw an error via the stop function with the exact message \invalid outcome".
